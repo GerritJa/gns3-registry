@@ -16,4 +16,4 @@ Building the container
 
 .. code:: bash
 
-    docker build -t gns3/openvswitch .
+    docker build -t gerritja/openvswitch .
