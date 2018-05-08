@@ -55,11 +55,16 @@ until [ $x = "4" ]; do
 done
 
 ## change the bandwidth of the interface (https://n40lab.wordpress.com/2013/05/04/openvswitch-setting-a-bandwidth-limit/)
-if [ ! -z $ETH0_BANDWIDTH_BIT ]
+if [ ! -z $ETH0_BANDWIDTH_KBIT ]
 then
+
+ETH0_BANDWIDTH_BIT=$(($ETH0_BANDWIDTH_KBIT * 1000))
+
 ovs-vsctl -- set Port eth0 qos=@newqos -- \
 	--id=@newqos create QoS type=linux-htb other-config:max-rate=$ETH0_BANDWIDTH_BIT queues=0=@q0 -- \
 	--id=@q0   create   Queue   other-config:min-rate=$ETH0_BANDWIDTH_BIT other-config:max-rate=$ETH0_BANDWIDTH_BIT
+else
+ovs-vsctl clear Port eth0 qos
 fi
 
 
